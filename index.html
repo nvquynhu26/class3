@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GLOBAL EDUCATION ANALYTICS // YouMe</title>
+  <title>Global Education Analytics // Youme</title>
   
   <!-- Google Fonts: Orbitron & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,9 +19,9 @@
 
   <style>
     :root {
-      --bg-dark: #07080a;
-      --bg-panel: #0d1117;
-      --border-color: #1f293d;
+      --bg-dark: #060709;
+      --bg-panel: #0b0f17;
+      --border-color: #1e293b;
       --neon-cyan: #00f0ff;
       --neon-pink: #ff0055;
       --neon-amber: #ffaa00;
@@ -46,21 +46,21 @@
       display: flex;
       flex-direction: column;
       background-image: 
-        radial-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 0),
-        linear-gradient(to bottom, rgba(13, 17, 23, 0.94), rgba(7, 8, 10, 0.99));
+        radial-gradient(rgba(0, 240, 255, 0.06) 1px, transparent 0),
+        linear-gradient(to bottom, rgba(11, 15, 23, 0.95), rgba(6, 7, 9, 0.99));
       background-size: 32px 32px, 100% 100%;
       overflow-x: hidden;
-      font-size: 16px; /* Cỡ chữ cơ sở tăng lên */
+      font-size: 16px;
     }
 
-    /* Top Navigation HUD */
+    /* Top HUD Navigation Bar */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 22px 35px;
+      padding: 20px 36px;
       border-bottom: 2px solid var(--border-color);
-      background: rgba(13, 17, 23, 0.9);
+      background: rgba(11, 15, 23, 0.92);
       backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
@@ -69,13 +69,13 @@
 
     .brand-title {
       font-family: var(--font-display);
-      font-size: 1.65rem; /* Tăng 2 cỡ */
+      font-size: 1.6rem;
       letter-spacing: 2px;
       color: var(--neon-cyan);
       display: flex;
       align-items: center;
       gap: 14px;
-      text-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+      text-shadow: 0 0 14px rgba(0, 240, 255, 0.5);
     }
 
     .brand-title::before {
@@ -90,35 +90,76 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 30px;
+      gap: 32px;
     }
 
-    /* Tab Switcher */
+    /* Nâng cấp Tab Switcher phong cách Neon Cyber Bắt Mắt */
     .tab-bar {
       display: flex;
-      gap: 10px;
-      background: #090c10;
-      padding: 4px;
-      border: 1px solid var(--border-color);
+      gap: 14px;
+      background: rgba(6, 8, 12, 0.95);
+      padding: 6px;
+      border: 1px solid #2a374d;
+      border-radius: 4px;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
     }
 
     .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
+      background: #0f1523;
+      border: 1px solid #223249;
+      color: #94a3b8;
       font-family: var(--font-display);
-      font-size: 0.95rem; /* Tăng cỡ */
-      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 12px 24px;
       cursor: pointer;
-      transition: all 0.25s ease;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
     }
 
-    .tab-btn.active {
-      background: rgba(0, 240, 255, 0.15);
+    .tab-btn .tab-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #475569;
+      transition: all 0.3s;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+      border-color: #38bdf8;
+      background: #141c2e;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+    }
+
+    .tab-btn.active#tab-btn-analytics {
+      background: rgba(0, 240, 255, 0.16);
       color: var(--neon-cyan);
-      border: 1px solid var(--neon-cyan);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+      border: 1.5px solid var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), inset 0 0 10px rgba(0, 240, 255, 0.2);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+    }
+
+    .tab-btn.active#tab-btn-analytics .tab-dot {
+      background: var(--neon-cyan);
+      box-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    .tab-btn.active#tab-btn-map {
+      background: rgba(0, 255, 102, 0.16);
+      color: var(--neon-green);
+      border: 1.5px solid var(--neon-green);
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.45), inset 0 0 10px rgba(0, 255, 102, 0.2);
+      text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
+    }
+
+    .tab-btn.active#tab-btn-map .tab-dot {
+      background: var(--neon-green);
+      box-shadow: 0 0 8px var(--neon-green);
     }
 
     /* Language Switcher */
@@ -126,7 +167,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      font-size: 1rem; /* Tăng cỡ */
+      font-size: 1rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
@@ -180,9 +221,9 @@
       box-shadow: 0 0 10px var(--neon-pink);
     }
 
-    /* Main Container: Chiếm 98% chiều rộng màn hình */
+    /* Main Container */
     main {
-      padding: 24px 28px;
+      padding: 22px 28px;
       width: 98vw;
       max-width: 1920px;
       margin: 0 auto;
@@ -199,7 +240,7 @@
       align-items: flex-end;
       gap: 20px;
       background: var(--bg-panel);
-      padding: 20px 26px;
+      padding: 18px 24px;
       border: 1px solid var(--border-color);
       border-left: 5px solid var(--neon-cyan);
     }
@@ -208,12 +249,12 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      min-width: 260px;
+      min-width: 280px;
       flex: 1;
     }
 
     .control-group label {
-      font-size: 0.9rem; /* Tăng cỡ */
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: var(--text-muted);
@@ -226,7 +267,7 @@
       border: 1px solid #334155;
       font-family: var(--font-mono);
       padding: 13px 18px;
-      font-size: 1.05rem; /* Chữ to hơn 2 cỡ */
+      font-size: 1.05rem;
       outline: none;
       transition: all 0.25s;
     }
@@ -290,7 +331,7 @@
 
     .hud-val {
       font-family: var(--font-display);
-      font-size: 1.6rem; /* Tăng cỡ số liệu */
+      font-size: 1.6rem;
       margin-top: 8px;
       color: var(--neon-cyan);
       letter-spacing: 1px;
@@ -308,14 +349,14 @@
 
     .viz-horizontal-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr; /* 2 cột cân xứng hai bên */
+      grid-template-columns: 1fr 1fr;
       gap: 22px;
       width: 100%;
     }
 
     @media (max-width: 1200px) {
       .viz-horizontal-grid {
-        grid-template-columns: 1fr; /* Trở về 1 cột trên màn hình nhỏ */
+        grid-template-columns: 1fr;
       }
     }
 
@@ -338,7 +379,7 @@
 
     .chart-title {
       font-family: var(--font-display);
-      font-size: 1.15rem; /* Tăng 2 cỡ */
+      font-size: 1.2rem;
       letter-spacing: 1.5px;
       color: var(--text-main);
       display: flex;
@@ -352,10 +393,45 @@
       font-weight: 900;
     }
 
+    /* Bộ chọn năm ngay trong header của biểu đồ chi tiết */
+    .year-inline-picker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #080c14;
+      padding: 4px 10px;
+      border: 1px solid #334155;
+    }
+
+    .year-inline-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--neon-pink);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: var(--font-display);
+    }
+
+    .year-inline-select {
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid #475569;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .year-inline-select:focus {
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+    }
+
     .chart-canvas-container {
       position: relative;
       width: 100%;
-      height: 560px; /* Mở rộng chiều cao để biểu đồ lớn hơn */
+      height: 560px;
     }
 
     /* World Map Tab Style */
@@ -368,14 +444,13 @@
 
     #leafletMap {
       width: 100%;
-      height: 700px; /* Bản đồ siêu rộng */
+      height: 700px;
       background: #080a0f !important;
       border: 1px solid #1e293b;
     }
 
-    /* Custom Leaflet Tooltip */
     .cyber-map-tooltip {
-      background: rgba(13, 17, 23, 0.95) !important;
+      background: rgba(11, 15, 23, 0.95) !important;
       border: 1px solid var(--neon-cyan) !important;
       color: var(--text-main) !important;
       font-family: var(--font-mono) !important;
@@ -403,16 +478,18 @@
 
   <!-- Top Robotic Header -->
   <header>
-    <div class="brand-title">GLOBAL EDUCATION ANALYTICS // YouMe</div>
+    <div class="brand-title">CYBER_METRICS // CORE 2.6</div>
     
     <div class="nav-actions">
-      <!-- Tab Switcher -->
+      <!-- High Visibility Neon Tabs -->
       <div class="tab-bar">
         <button class="tab-btn active" id="tab-btn-analytics" onclick="switchMainTab('analytics')">
-          [ 01 // ANALYTICS HUD ]
+          <span class="tab-dot"></span>
+          <span id="txt-tab-analytics">분석 HUD</span>
         </button>
         <button class="tab-btn" id="tab-btn-map" onclick="switchMainTab('map')">
-          [ 02 // GLOBAL MAP MATRIX ]
+          <span class="tab-dot"></span>
+          <span id="txt-tab-map">글로벌 지도 매트릭스</span>
         </button>
       </div>
 
@@ -429,7 +506,7 @@
   </header>
 
   <main>
-    <!-- Controls Toolbar -->
+    <!-- Controls Toolbar (Không còn ô chọn năm ở đây) -->
     <div class="controls-grid">
       <div class="control-group">
         <label id="lbl-primary-target">기본 대상 선택 (Primary Target)</label>
@@ -439,11 +516,6 @@
       <div class="control-group" id="group-compare" style="display: none;">
         <label id="lbl-compare-target">비교 대상 (Comparison Target)</label>
         <select id="country-select-2"></select>
-      </div>
-
-      <div class="control-group" id="group-year">
-        <label id="lbl-year">연도 선택 (Timeline Node)</label>
-        <select id="year-select"></select>
       </div>
 
       <button type="button" class="btn-action" id="btn-compare-mode">
@@ -469,7 +541,7 @@
       </div>
     </div>
 
-    <!-- TAB 1: Dual Analytics Charts (Side by Side) -->
+    <!-- TAB 1: Analytics Charts (Side by Side) -->
     <div class="tab-content active" id="view-analytics">
       <div class="viz-horizontal-grid">
         <!-- Left: Macro Radar / Timeline Chart -->
@@ -483,11 +555,16 @@
           </div>
         </div>
 
-        <!-- Right: Micro Categories Chart -->
+        <!-- Right: Micro Categories Chart (Đã di chuyển ô chọn năm xuống đây) -->
         <div class="chart-box">
           <div class="chart-box-header">
-            <div class="chart-title" id="title-micro-chart">세부 교육 서비스 카테고리 비율 (%)</div>
-            <span style="font-size: 0.85rem; color: var(--neon-pink); font-weight: 700;">[ CATEGORICAL DISTRIBUTION ]</span>
+            <div class="chart-title" id="title-micro-chart">SOUTH KOREA</div>
+            
+            <!-- Đổi vị trí 연도 선택 thay thế cho tag cũ -->
+            <div class="year-inline-picker">
+              <span class="year-inline-label" id="lbl-inline-year">연도:</span>
+              <select class="year-inline-select" id="year-select"></select>
+            </div>
           </div>
           <div class="chart-canvas-container">
             <canvas id="lowerChart"></canvas>
@@ -519,17 +596,16 @@
     ========================================================== */
     const I18N = {
       ko: {
-        tabAnalytics: "[ 01 // 분석 HUD ]",
-        tabMap: "[ 02 // 글로벌 지도 매트릭스 ]",
+        tabAnalytics: "분석 HUD",
+        tabMap: "글로벌 지도 매트릭스",
         primaryTarget: "기본 대상 선택 (Primary)",
         compareTarget: "비교 대상 선택 (Secondary)",
-        yearSelect: "연도 선택 (Timeline Node)",
+        inlineYearLabel: "연도:",
         btnCompareOn: "[-] 단일 국가 모드",
         btnCompareOff: "[+] 국가 비교 모드",
         macroChartTitleCountry: "연도별 카테고리 시계열 추이 (2023-2026)",
         macroChartTitleTotal: "전체 국가별 교육 비참여율(%) 추이",
         macroChartTitleCompare: "두 국가 간 교육 서비스 이용률 비교",
-        microChartTitle: "세부 교육 서비스 카테고리 비율 (%)",
         mapTitle: "글로벌 타겟 인구 버블 매트릭스 (원 크기: 목표 인구 비례)",
         totalOption: "[전체 국가 합산] TOTAL METRICS",
         hudTopic: "조사 주제",
@@ -548,17 +624,16 @@
         }
       },
       en: {
-        tabAnalytics: "[ 01 // ANALYTICS HUD ]",
-        tabMap: "[ 02 // GLOBAL MAP MATRIX ]",
+        tabAnalytics: "ANALYTICS HUD",
+        tabMap: "GLOBAL MAP MATRIX",
         primaryTarget: "Primary Target Selection",
         compareTarget: "Comparison Target Selection",
-        yearSelect: "Timeline Year Node",
+        inlineYearLabel: "YEAR:",
         btnCompareOn: "[-] Single View Mode",
         btnCompareOff: "[+] Dual Compare Mode",
         macroChartTitleCountry: "Longitudinal Category Trends (2023-2026)",
         macroChartTitleTotal: "Non-usage Rate Across All Countries (%)",
         macroChartTitleCompare: "Cross-National Education Service Adoption (%)",
-        microChartTitle: "Sub-Category Educational Distribution (%)",
         mapTitle: "Global Target Population Bubble Matrix (Bubble Size Proportional to Target Population)",
         totalOption: "[ALL COUNTRIES] TOTAL METRICS",
         hudTopic: "Survey Topic",
@@ -578,7 +653,6 @@
       }
     };
 
-    /* Bảng tọa độ địa lý các quốc gia có trong dữ liệu */
     const COUNTRY_COORDS = {
       "Argentina": [-38.4161, -63.6167],
       "Australia": [-25.2744, 133.7751],
@@ -612,7 +686,6 @@
       "Vietnam": [14.0583, 108.2772]
     };
 
-    /* Hệ màu Cyber Neon cố định đồng bộ giữa Biểu đồ và Bản đồ */
     const NEON_PALETTE = [
       '#00f0ff', '#ff0055', '#ffaa00', '#00ff66', 
       '#9d4edd', '#0070f3', '#ff007f', '#50e3c2',
@@ -627,7 +700,7 @@
     let lowerChartInstance = null;
     let leafletMapInstance = null;
     let mapCirclesLayer = null;
-    let countryColorMap = {}; // Lưu trữ bảng màu thống nhất cho từng quốc gia
+    let countryColorMap = {};
 
     /* ==========================================================
        LOAD DATASET
@@ -645,7 +718,6 @@
       initApp();
     }
 
-    // Gán mã màu cố định cho từng quốc gia theo thứ tự alphabet
     function initCountryColors() {
       const countries = Object.keys(rawData).sort();
       countries.forEach((country, idx) => {
@@ -720,6 +792,7 @@
     function updateYearDropdown() {
       const c1 = document.getElementById('country-select-1').value;
       const ySelect = document.getElementById('year-select');
+      const prevYear = ySelect.value;
       ySelect.innerHTML = '';
 
       let availableYears = ["2023", "2024", "2025", "2026"];
@@ -733,11 +806,16 @@
         opt.textContent = yr;
         ySelect.appendChild(opt);
       });
-      ySelect.value = availableYears[availableYears.length - 1];
+
+      // Giữ nguyên năm đang chọn nếu tồn tại trong danh sách mới
+      if (availableYears.includes(prevYear)) {
+        ySelect.value = prevYear;
+      } else {
+        ySelect.value = availableYears[availableYears.length - 1];
+      }
     }
 
     function setupEventListeners() {
-      // Language Toggle
       document.getElementById('lang-toggle').addEventListener('change', (e) => {
         currentLang = e.target.checked ? 'en' : 'ko';
         updateLanguageUI();
@@ -751,12 +829,13 @@
       });
 
       document.getElementById('country-select-2').addEventListener('change', renderViews);
+      
+      // Lắng nghe sự kiện thay đổi năm tại vị trí mới
       document.getElementById('year-select').addEventListener('change', () => {
         renderViews();
         if (leafletMapInstance) renderMapBubbles();
       });
 
-      // Compare Mode Switch
       const btnCompare = document.getElementById('btn-compare-mode');
       btnCompare.addEventListener('click', () => {
         isCompareMode = !isCompareMode;
@@ -769,11 +848,11 @@
 
     function updateLanguageUI() {
       const t = I18N[currentLang];
-      document.getElementById('tab-btn-analytics').textContent = t.tabAnalytics;
-      document.getElementById('tab-btn-map').textContent = t.tabMap;
+      document.getElementById('txt-tab-analytics').textContent = t.tabAnalytics;
+      document.getElementById('txt-tab-map').textContent = t.tabMap;
       document.getElementById('lbl-primary-target').textContent = t.primaryTarget;
       document.getElementById('lbl-compare-target').textContent = t.compareTarget;
-      document.getElementById('lbl-year').textContent = t.yearSelect;
+      document.getElementById('lbl-inline-year').textContent = t.inlineYearLabel;
       document.getElementById('btn-compare-mode').textContent = isCompareMode ? t.btnCompareOn : t.btnCompareOff;
       document.getElementById('title-map').textContent = t.mapTitle;
 
@@ -801,7 +880,6 @@
       const selectedYear = document.getElementById('year-select').value;
       const t = I18N[currentLang];
 
-      // Update Top HUD Display
       if (c1 === 'TOTAL') {
         document.getElementById('hud-val-topic').textContent = "Cross-National Aggregation";
         document.getElementById('hud-val-sample').textContent = "ALL WAVES TOTAL";
@@ -880,7 +958,7 @@
               grid: { color: '#27354a', lineWidth: 1.5 },
               pointLabels: {
                 color: '#e2e8f0',
-                font: { family: 'JetBrains Mono', size: 13, weight: '700' } // Tăng 2 cỡ chữ
+                font: { family: 'JetBrains Mono', size: 13, weight: '700' }
               },
               ticks: {
                 color: '#64748b',
@@ -1019,11 +1097,12 @@
     }
 
     /* ==========================================================
-       CHART 2: MICRO CATEGORIES DISTRIBUTION (RIGHT PANEL)
+       CHART 2: MICRO CATEGORIES (RIGHT PANEL)
+       Tiêu đề đã tinh gọn chỉ còn tên Quốc gia
     ========================================================== */
     function renderSingleCountryMicroChart(countryKey, year) {
-      document.getElementById('title-micro-chart').textContent = 
-        `${countryKey} (${year}) // ${I18N[currentLang].microChartTitle}`;
+      // Loại bỏ cụm 세부 교육 서비스 카테고리 비율, chỉ giữ tên Quốc gia
+      document.getElementById('title-micro-chart').textContent = countryKey.toUpperCase();
 
       const cData = rawData[countryKey];
       if (!cData || !cData.by_year || !cData.by_year[year]) {
@@ -1062,7 +1141,7 @@
               position: 'right',
               labels: { 
                 color: '#e2e8f0', 
-                font: { size: 12.5, family: 'JetBrains Mono', weight: '600' }, // Tăng 2 cỡ chữ
+                font: { size: 12.5, family: 'JetBrains Mono', weight: '600' },
                 padding: 14,
                 boxWidth: 16
               }
@@ -1073,8 +1152,7 @@
     }
 
     function renderTotalMicroChart(year) {
-      document.getElementById('title-micro-chart').textContent = 
-        `GLOBAL TOTAL (${year}) // Average Category Distribution`;
+      document.getElementById('title-micro-chart').textContent = "GLOBAL TOTAL";
 
       const countries = Object.keys(rawData);
       const categoryMap = {};
@@ -1125,8 +1203,7 @@
     }
 
     function renderComparisonMicroChart(c1, c2, year) {
-      document.getElementById('title-micro-chart').textContent = 
-        `${c1} vs ${c2} (${year}) // ${I18N[currentLang].microChartTitle}`;
+      document.getElementById('title-micro-chart').textContent = `${c1.toUpperCase()} VS ${c2.toUpperCase()}`;
 
       const list1 = (rawData[c1]?.by_year?.[year] || []).filter(s => s.service !== "Not applicable");
       const list2 = (rawData[c2]?.by_year?.[year] || []).filter(s => s.service !== "Not applicable");
@@ -1189,7 +1266,6 @@
        TAB 2: LEAFLET WORLD MAP (DARK MINIMALISM)
     ========================================================== */
     function initWorldMap() {
-      // Khởi tạo bản đồ trung tâm
       leafletMapInstance = L.map('leafletMap', {
         center: [25.0, 10.0],
         zoom: 2,
@@ -1198,7 +1274,6 @@
         attributionControl: false
       });
 
-      // Sử dụng CartoDB Dark Matter tile map (chuẩn Minimal Dark Mode viền sẫm)
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd',
         maxZoom: 19
@@ -1220,7 +1295,6 @@
         if (!coords) return;
 
         const cData = rawData[country];
-        // Tìm số liệu target_population của năm đang chọn hoặc năm gần nhất
         let targetPop = 0;
         if (cData.years && cData.years[selectedYear]) {
           targetPop = cData.years[selectedYear].target_population;
@@ -1231,8 +1305,6 @@
 
         if (!targetPop) return;
 
-        // Tính bán kính: Tỉ lệ với căn bậc hai của dân số mục tiêu
-        // Dân số từ ~3 triệu (Áo, Phần Lan) đến ~700 triệu (Trung Quốc, Ấn Độ)
         const radius = Math.max(8, Math.sqrt(targetPop) / 450);
         const countryColor = countryColorMap[country] || '#00f0ff';
 
@@ -1245,7 +1317,6 @@
           fillOpacity: 0.45
         });
 
-        // Tooltip phong cách Cyberpunk HUD
         const tooltipContent = `
           <div style="font-family: var(--font-mono); line-height: 1.5;">
             <div style="color: ${countryColor}; font-weight: 800; font-size: 1rem; border-bottom: 1px solid #334155; padding-bottom: 4px; margin-bottom: 4px;">
@@ -1261,7 +1332,6 @@
           direction: 'top'
         });
 
-        // Nhấp vào bubble trên bản đồ sẽ chọn ngay quốc gia đó ở thanh điều khiển
         circle.on('click', () => {
           document.getElementById('country-select-1').value = country;
           switchMainTab('analytics');
@@ -1273,7 +1343,6 @@
       });
     }
 
-    // Tự động nạp dữ liệu khi tải trang
     window.addEventListener('DOMContentLoaded', loadDataset);
   </script>
 </body>
