@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CYBER_METRICS // Global Education Analytics</title>
+  <!-- Google Fonts: Orbitron & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #07080a;
+      --bg-panel: #0d1117;
+      --border-color: #1f2937;
+      --neon-cyan: #00f0ff;
+      --neon-pink: #ff0055;
+      --neon-amber: #ffaa00;
+      --neon-green: #00ff66;
+      --text-main: #e2e8f0;
+      --text-muted: #64748b;
+      --font-display: 'Orbitron', monospace;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 0),
+        linear-gradient(to bottom, rgba(13, 17, 23, 0.9), rgba(7, 8, 10, 0.98));
+      background-size: 24px 24px, 100% 100%;
+      overflow-x: hidden;
+    }
+
+    /* Top HUD Navigation Bar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title::before {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    /* Language Switch Slider */
+    .lang-switch-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .lang-label {
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
+    .lang-label.active {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--border-color);
+      transition: .3s;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--neon-cyan);
+      box-shadow: 0 0 8px var(--neon-cyan);
+      transition: .3s;
+      border-radius: 2px;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: var(--neon-pink);
+      box-shadow: 0 0 8px var(--neon-pink);
+    }
+
+    /* Main Content Layout */
+    main {
+      padding: 30px 40px;
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    /* Control Panel / Toolbar */
+    .controls-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      background: var(--bg-panel);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--neon-cyan);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 200px;
+    }
+
+    .control-group label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    select, button {
+      background: #090c10;
+      color: var(--text-main);
+      border: 1px solid #30363d;
+      font-family: var(--font-mono);
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    select:focus, select:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    .btn-toggle-mode {
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+      align-self: flex-end;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+    }
+
+    .btn-toggle-mode.active-compare {
+      border-color: var(--neon-pink);
+      color: var(--neon-pink);
+    }
+
+    .btn-toggle-mode:hover {
+      background: rgba(0, 240, 255, 0.1);
+    }
+
+    /* Meta HUD Display */
+    .info-hud {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .hud-card {
+      background: var(--bg-panel);
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .hud-card::after {
+      content: "";
+      position: absolute;
+      top: 0; right: 0;
+      width: 6px; height: 6px;
+      background: var(--neon-cyan);
+    }
+
+    .hud-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hud-val {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-top: 6px;
+      color: var(--neon-cyan);
+    }
+
+    /* Visualization Grid */
+    .viz-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+
+    .chart-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      position: relative;
+    }
+
+    .chart-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px dashed #21262d;
+      padding-bottom: 12px;
+    }
+
+    .chart-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 1.5px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-title::before {
+      content: "//";
+      color: var(--neon-cyan);
+    }
+
+    .chart-canvas-container {
+      position: relative;
+      width: 100%;
+      height: 380px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 20px 40px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Robotic HUD -->
+  <header>
+    <div class="brand-title">CYBER_METRICS // CORE 2.6</div>
+    
+    <!-- Language Slider Toggle -->
+    <div class="lang-switch-box">
+      <span class="lang-label active" id="label-ko">한국어</span>
+      <label class="switch">
+        <input type="checkbox" id="lang-toggle" />
+        <span class="slider"></span>
+      </label>
+      <span class="lang-label" id="label-en">ENG</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Tool controls -->
+    <div class="controls-grid">
+      <div class="control-group">
+        <label id="lbl-primary-target">대상 선택 (Primary Target)</label>
+        <select id="country-select-1"></select>
+      </div>
+
+      <div class="control-group" id="group-compare" style="display: none;">
+        <label id="lbl-compare-target">비교 대상 (Comparison Target)</label>
+        <select id="country-select-2"></select>
+      </div>
+
+      <div class="control-group" id="group-year">
+        <label id="lbl-year">연도 선택 (Timeline Node)</label>
+        <select id="year-select"></select>
+      </div>
+
+      <button type="button" class="btn-toggle-mode" id="btn-compare-mode">
+        [+] 국가 비교 모드
+      </button>
+    </div>
+
+    <!-- Data Status HUD -->
+    <div class="info-hud">
+      <div class="hud-card">
+        <div class="hud-label" id="hud-lbl-topic">설문 주제</div>
+        <div class="hud-val" id="hud-val-topic" style="font-size: 0.85rem; font-family: var(--font-mono);">
+          Education Services
+        </div>
+      </div>
+      <div class="hud-card">
+        <div class="hud-label" id="hud-lbl-sample">표본 규모 (Sample Size)</div>
+        <div class="hud-val" id="hud-val-sample">--</div>
+      </div>
+      <div class="hud-card">
+        <div class="hud-label" id="hud-lbl-pop">대상 인구 (Target Population)</div>
+        <div class="hud-val" id="hud-val-pop">--</div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="viz-grid">
+      <!-- Upper Chart: Macro Timeline (2023 - 2026) -->
+      <div class="chart-box">
+        <div class="chart-box-header">
+          <div class="chart-title" id="title-macro-chart">시계열 분석 (2023 - 2026)</div>
+          <span style="font-size: 0.75rem; color: var(--neon-cyan);">[ RADAR / MULTI-WAVE ]</span>
+        </div>
+        <div class="chart-canvas-container">
+          <canvas id="upperChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Lower Chart: Categories Sub-data -->
+      <div class="chart-box">
+        <div class="chart-box-header">
+          <div class="chart-title" id="title-micro-chart">세부 교육 카테고리 구성비 (%)</div>
+          <span style="font-size: 0.75rem; color: var(--neon-pink);">[ CATEGORICAL DISTRIBUTION ]</span>
+        </div>
+        <div class="chart-canvas-container">
+          <canvas id="lowerChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>SYSTEM: STATISTICAL_SURVEY_ANALYSIS // DEPLOYMENT: GITHUB_PAGES</div>
+    <div>STATUS: ACTIVE // 2023-2026 TIMELINE SYNCHRONIZED</div>
+  </footer>
+
+  <script>
+    /* ==========================================================
+       I18N DICTIONARY (KOREAN [DEFAULT] & ENGLISH)
+    ========================================================== */
+    const I18N = {
+      ko: {
+        brand: "CYBER_METRICS // CORE 2.6",
+        primaryTarget: "기본 대상 선택 (Primary)",
+        compareTarget: "비교 대상 선택 (Secondary)",
+        yearSelect: "연도 선택 (Node)",
+        btnCompareOn: "[-] 단일 국가 모드",
+        btnCompareOff: "[+] 국가 비교 모드",
+        macroChartTitleCountry: "연도별 카테고리 추이 (2023-2026 시계열)",
+        macroChartTitleTotal: "전체 국가별 비이용률(미참여) 추이",
+        macroChartTitleCompare: "두 국가 간 연도별 교육 참여율 비교",
+        microChartTitle: "세부 교육 서비스 카테고리 비율 (%)",
+        totalOption: "[전체 국가 합산] TOTAL METRICS",
+        hudTopic: "조사 항목",
+        hudSample: "표본 수",
+        hudPop: "목표 인구",
+        na: "정보 없음",
+        services: {
+          "Language courses": "어학 강좌",
+          "IT courses": "IT/컴퓨터 교육",
+          "Tutoring services": "개인 과외/튜터링",
+          "University / college education services (e.g., to earn a degree)": "대학/대학원 학위 과정",
+          "Professional certification services (e.g., through institutes and government agencies)": "전문 자격증 취득 과정",
+          "Other": "기타 교육",
+          "I haven't used any professional education & learning services": "교육 서비스를 이용하지 않음",
+          "Not applicable": "해당 없음"
+        }
+      },
+      en: {
+        brand: "CYBER_METRICS // CORE 2.6",
+        primaryTarget: "Primary Target Selection",
+        compareTarget: "Comparison Target Selection",
+        yearSelect: "Timeline Year Node",
+        btnCompareOn: "[-] Single View Mode",
+        btnCompareOff: "[+] Dual Compare Mode",
+        macroChartTitleCountry: "Longitudinal Category Trends (2023-2026)",
+        macroChartTitleTotal: "Non-usage Rate Across All Countries",
+        macroChartTitleCompare: "Cross-National Education Service Adoption",
+        microChartTitle: "Sub-Category Educational Distribution (%)",
+        totalOption: "[ALL COUNTRIES] TOTAL METRICS",
+        hudTopic: "Survey Topic",
+        hudSample: "Sample Size",
+        hudPop: "Target Population",
+        na: "N/A",
+        services: {
+          "Language courses": "Language courses",
+          "IT courses": "IT courses",
+          "Tutoring services": "Tutoring services",
+          "University / college education services (e.g., to earn a degree)": "University / college degree",
+          "Professional certification services (e.g., through institutes and government agencies)": "Professional certification",
+          "Other": "Other",
+          "I haven't used any professional education & learning services": "Non-users (No service used)",
+          "Not applicable": "Not applicable"
+        }
+      }
+    };
+
+    let currentLang = "ko";
+    let isCompareMode = false;
+    let rawData = {};
+    let upperChartInstance = null;
+    let lowerChartInstance = null;
+
+    // Palette Neon
+    const NEON_PALETTE = [
+      '#00f0ff', '#ff0055', '#ffaa00', '#00ff66', 
+      '#7928ca', '#ff0080', '#0070f3', '#50e3c2'
+    ];
+
+    /* ==========================================================
+       DATA LOADER (FETCH FROM total.json WITH FALLBACK)
+    ========================================================== */
+    async function loadDataset() {
+      try {
+        const response = await fetch('./total.json');
+        if (!response.ok) throw new Error("Fetch failed");
+        rawData = await response.json();
+      } catch (err) {
+        console.warn("Could not load total.json via network fetch, using fallback cache context.", err);
+        // Fallback context from user prompt
+        rawData = window.__FALLBACK_DATA || {};
+      }
+      initApp();
+    }
+
+    /* ==========================================================
+       INITIALIZATION & DOM EVENTS
+    ========================================================== */
+    function initApp() {
+      setupDropdowns();
+      setupEventListeners();
+      updateLanguageUI();
+      renderViews();
+    }
+
+    function setupDropdowns() {
+      const pSelect = document.getElementById('country-select-1');
+      const cSelect = document.getElementById('country-select-2');
+      pSelect.innerHTML = '';
+      cSelect.innerHTML = '';
+
+      // Option for Total
+      const optTotal = document.createElement('option');
+      optTotal.value = 'TOTAL';
+      optTotal.textContent = I18N[currentLang].totalOption;
+      pSelect.appendChild(optTotal);
+
+      const countries = Object.keys(rawData).sort();
+      countries.forEach(country => {
+        const o1 = document.createElement('option');
+        o1.value = country;
+        o1.textContent = country;
+        pSelect.appendChild(o1);
+
+        const o2 = document.createElement('option');
+        o2.value = country;
+        o2.textContent = country;
+        cSelect.appendChild(o2);
+      });
+
+      // Default to South Korea if present, else first
+      if (rawData["South Korea"]) {
+        pSelect.value = "South Korea";
+      }
+      if (rawData["United States"]) {
+        cSelect.value = "United States";
+      }
+
+      updateYearDropdown();
+    }
+
+    function updateYearDropdown() {
+      const c1 = document.getElementById('country-select-1').value;
+      const ySelect = document.getElementById('year-select');
+      ySelect.innerHTML = '';
+
+      let availableYears = ["2023", "2024", "2025", "2026"];
+      if (c1 !== 'TOTAL' && rawData[c1] && rawData[c1].by_year) {
+        availableYears = Object.keys(rawData[c1].by_year).sort();
+      }
+
+      availableYears.forEach(yr => {
+        const opt = document.createElement('option');
+        opt.value = yr;
+        opt.textContent = yr;
+        ySelect.appendChild(opt);
+      });
+      ySelect.value = availableYears[availableYears.length - 1]; // latest
+    }
+
+    function setupEventListeners() {
+      // Language Toggle
+      const toggle = document.getElementById('lang-toggle');
+      toggle.addEventListener('change', (e) => {
+        currentLang = e.target.checked ? 'en' : 'ko';
+        updateLanguageUI();
+        renderViews();
+      });
+
+      // Country 1 change
+      document.getElementById('country-select-1').addEventListener('change', () => {
+        updateYearDropdown();
+        renderViews();
+      });
+
+      // Country 2 change
+      document.getElementById('country-select-2').addEventListener('change', renderViews);
+
+      // Year change
+      document.getElementById('year-select').addEventListener('change', renderViews);
+
+      // Compare Mode Button
+      const btnCompare = document.getElementById('btn-compare-mode');
+      btnCompare.addEventListener('click', () => {
+        isCompareMode = !isCompareMode;
+        document.getElementById('group-compare').style.display = isCompareMode ? 'flex' : 'none';
+        btnCompare.classList.toggle('active-compare', isCompareMode);
+        btnCompare.textContent = isCompareMode ? I18N[currentLang].btnCompareOn : I18N[currentLang].btnCompareOff;
+        renderViews();
+      });
+    }
+
+    function updateLanguageUI() {
+      const t = I18N[currentLang];
+      document.getElementById('lbl-primary-target').textContent = t.primaryTarget;
+      document.getElementById('lbl-compare-target').textContent = t.compareTarget;
+      document.getElementById('lbl-year').textContent = t.yearSelect;
+      document.getElementById('btn-compare-mode').textContent = isCompareMode ? t.btnCompareOn : t.btnCompareOff;
+      
+      document.getElementById('hud-lbl-topic').textContent = t.hudTopic;
+      document.getElementById('hud-lbl-sample').textContent = t.hudSample;
+      document.getElementById('hud-lbl-pop').textContent = t.hudPop;
+
+      document.getElementById('label-ko').classList.toggle('active', currentLang === 'ko');
+      document.getElementById('label-en').classList.toggle('active', currentLang === 'en');
+
+      // Update Total Option text
+      const optTotal = document.querySelector('#country-select-1 option[value="TOTAL"]');
+      if (optTotal) optTotal.textContent = t.totalOption;
+    }
+
+    function getServiceName(rawName) {
+      return I18N[currentLang].services[rawName] || rawName;
+    }
+
+    /* ==========================================================
+       VIEW RENDER DISPATCHER
+    ========================================================== */
+    function renderViews() {
+      const c1 = document.getElementById('country-select-1').value;
+      const c2 = document.getElementById('country-select-2').value;
+      const selectedYear = document.getElementById('year-select').value;
+      const t = I18N[currentLang];
+
+      // Update Top HUD metadata
+      if (c1 === 'TOTAL') {
+        document.getElementById('hud-val-topic').textContent = "Cross-National Aggregation";
+        document.getElementById('hud-val-sample').textContent = "ALL WAVES";
+        document.getElementById('hud-val-pop').textContent = "GLOBAL ONLINE";
+      } else if (rawData[c1] && rawData[c1].years && rawData[c1].years[selectedYear]) {
+        const yInfo = rawData[c1].years[selectedYear];
+        document.getElementById('hud-val-topic').textContent = rawData[c1].survey_info.topic;
+        document.getElementById('hud-val-sample').textContent = Number(yInfo.sample_size).toLocaleString();
+        document.getElementById('hud-val-pop').textContent = Number(yInfo.target_population).toLocaleString();
+      } else {
+        document.getElementById('hud-val-sample').textContent = t.na;
+        document.getElementById('hud-val-pop').textContent = t.na;
+      }
+
+      if (isCompareMode) {
+        renderComparisonMacroChart(c1, c2);
+        renderComparisonMicroChart(c1, c2, selectedYear);
+      } else if (c1 === 'TOTAL') {
+        renderTotalMacroChart();
+        renderTotalMicroChart(selectedYear);
+      } else {
+        renderSingleCountryMacroChart(c1);
+        renderSingleCountryMicroChart(c1, selectedYear);
+      }
+    }
+
+    /* ==========================================================
+       CHART 1: UPPER MACRO TIMELINE (2023 - 2026)
+    ========================================================== */
+    function renderSingleCountryMacroChart(countryKey) {
+      document.getElementById('title-macro-chart').textContent = 
+        `${countryKey} // ${I18N[currentLang].macroChartTitleCountry}`;
+
+      const cData = rawData[countryKey];
+      if (!cData || !cData.by_year) return;
+
+      const years = Object.keys(cData.by_year).sort();
+      const services = cData.by_year[years[0]]
+        .filter(s => s.service !== "Not applicable")
+        .map(s => s.service);
+
+      const labels = services.map(s => getServiceName(s));
+
+      const datasets = years.map((yr, idx) => {
+        const yearItems = cData.by_year[yr] || [];
+        const dataVals = services.map(srv => {
+          const found = yearItems.find(i => i.service === srv);
+          return found ? found.percentage : 0;
+        });
+
+        const color = NEON_PALETTE[idx % NEON_PALETTE.length];
+        return {
+          label: `${yr} Node`,
+          data: dataVals,
+          borderColor: color,
+          backgroundColor: color + '22',
+          pointBackgroundColor: color,
+          pointBorderColor: '#fff',
+          pointHoverRadius: 6,
+          borderWidth: 2
+        };
+      });
+
+      destroyChart(upperChartInstance);
+      const ctx = document.getElementById('upperChart').getContext('2d');
+      upperChartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          elements: { line: { tension: 0.2 } },
+          scales: {
+            r: {
+              angleLines: { color: '#1f2937' },
+              grid: { color: '#1f2937' },
+              pointLabels: {
+                color: '#94a3b8',
+                font: { family: 'JetBrains Mono', size: 10 }
+              },
+              ticks: {
+                color: '#64748b',
+                backdropColor: 'transparent',
+                stepSize: 10
+              }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#e2e8f0', font: { family: 'Orbitron' } } }
+          }
+        }
+      });
+    }
+
+    function renderTotalMacroChart() {
+      document.getElementById('title-macro-chart').textContent = I18N[currentLang].macroChartTitleTotal;
+
+      const countries = Object.keys(rawData).sort();
+      const allYears = ["2023", "2024", "2025", "2026"];
+
+      const datasets = countries.map((country, idx) => {
+        const cData = rawData[country];
+        const data = allYears.map(yr => {
+          if (!cData.by_year || !cData.by_year[yr]) return null;
+          const noneItem = cData.by_year[yr].find(i => 
+            i.service.includes("haven't used") || i.service.includes("None")
+          );
+          return noneItem ? noneItem.percentage : null;
+        });
+
+        const color = NEON_PALETTE[idx % NEON_PALETTE.length];
+        return {
+          label: country,
+          data: data,
+          borderColor: color,
+          backgroundColor: color,
+          borderWidth: 1.5,
+          tension: 0.3,
+          spanGaps: true,
+          pointRadius: 4
+        };
+      });
+
+      destroyChart(upperChartInstance);
+      const ctx = document.getElementById('upperChart').getContext('2d');
+      upperChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: { labels: allYears, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#1f2937' }, ticks: { color: '#94a3b8' } },
+            y: {
+              grid: { color: '#1f2937' },
+              ticks: { color: '#94a3b8' },
+              title: { display: true, text: 'Non-usage Rate %', color: '#64748b' }
+            }
+          },
+          plugins: {
+            legend: { position: 'right', labels: { color: '#e2e8f0', font: { size: 9 } } }
+          }
+        }
+      });
+    }
+
+    function renderComparisonMacroChart(c1, c2) {
+      document.getElementById('title-macro-chart').textContent = 
+        `${c1} vs ${c2} // ${I18N[currentLang].macroChartTitleCompare}`;
+
+      const allYears = ["2023", "2024", "2025", "2026"];
+
+      const calcAdoption = (cKey) => {
+        const cData = rawData[cKey];
+        return allYears.map(yr => {
+          if (!cData || !cData.by_year || !cData.by_year[yr]) return null;
+          const noneItem = cData.by_year[yr].find(i => i.service.includes("haven't used"));
+          return noneItem ? (100 - noneItem.percentage) : null;
+        });
+      };
+
+      destroyChart(upperChartInstance);
+      const ctx = document.getElementById('upperChart').getContext('2d');
+      upperChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: allYears,
+          datasets: [
+            {
+              label: `${c1} (Adoption %)`,
+              data: calcAdoption(c1),
+              backgroundColor: 'rgba(0, 240, 255, 0.7)',
+              borderColor: '#00f0ff',
+              borderWidth: 1
+            },
+            {
+              label: `${c2} (Adoption %)`,
+              data: calcAdoption(c2),
+              backgroundColor: 'rgba(255, 0, 85, 0.7)',
+              borderColor: '#ff0055',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#1f2937' }, ticks: { color: '#94a3b8' } },
+            y: {
+              grid: { color: '#1f2937' },
+              ticks: { color: '#94a3b8' },
+              title: { display: true, text: 'Education Usage %', color: '#64748b' }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#e2e8f0', font: { family: 'Orbitron' } } }
+          }
+        }
+      });
+    }
+
+    /* ==========================================================
+       CHART 2: LOWER MICRO CATEGORIES DISTRIBUTION
+    ========================================================== */
+    function renderSingleCountryMicroChart(countryKey, year) {
+      document.getElementById('title-micro-chart').textContent = 
+        `${countryKey} (${year}) // ${I18N[currentLang].microChartTitle}`;
+
+      const cData = rawData[countryKey];
+      if (!cData || !cData.by_year || !cData.by_year[year]) {
+        destroyChart(lowerChartInstance);
+        return;
+      }
+
+      const items = cData.by_year[year].filter(s => s.service !== "Not applicable");
+      const labels = items.map(i => getServiceName(i.service));
+      const percentages = items.map(i => i.percentage);
+
+      destroyChart(lowerChartInstance);
+      const ctx = document.getElementById('lowerChart').getContext('2d');
+      lowerChartInstance = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: percentages,
+            backgroundColor: NEON_PALETTE.map(c => c + 'bb'),
+            borderColor: NEON_PALETTE,
+            borderWidth: 1.5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              grid: { color: '#1f2937' },
+              ticks: { backdropColor: 'transparent', color: '#94a3b8' }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: { color: '#cbd5e1', font: { size: 10, family: 'JetBrains Mono' } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderTotalMicroChart(year) {
+      document.getElementById('title-micro-chart').textContent = 
+        `GLOBAL TOTAL (${year}) // Average Category Share`;
+
+      const countries = Object.keys(rawData);
+      const categoryMap = {};
+
+      countries.forEach(c => {
+        if (rawData[c].by_year && rawData[c].by_year[year]) {
+          rawData[c].by_year[year].forEach(item => {
+            if (item.service === "Not applicable") return;
+            if (!categoryMap[item.service]) categoryMap[item.service] = [];
+            categoryMap[item.service].push(item.percentage);
+          });
+        }
+      });
+
+      const labels = Object.keys(categoryMap).map(k => getServiceName(k));
+      const averages = Object.keys(categoryMap).map(k => {
+        const arr = categoryMap[k];
+        return (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1);
+      });
+
+      destroyChart(lowerChartInstance);
+      const ctx = document.getElementById('lowerChart').getContext('2d');
+      lowerChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Global Mean %',
+            data: averages,
+            backgroundColor: 'rgba(0, 240, 255, 0.4)',
+            borderColor: 'var(--neon-cyan)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#1f2937' }, ticks: { color: '#94a3b8' } },
+            y: { grid: { color: '#1f2937' }, ticks: { color: '#cbd5e1', font: { size: 10 } } }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
+    function renderComparisonMicroChart(c1, c2, year) {
+      document.getElementById('title-micro-chart').textContent = 
+        `${c1} vs ${c2} (${year}) // ${I18N[currentLang].microChartTitle}`;
+
+      const list1 = (rawData[c1]?.by_year?.[year] || []).filter(s => s.service !== "Not applicable");
+      const list2 = (rawData[c2]?.by_year?.[year] || []).filter(s => s.service !== "Not applicable");
+
+      const services = list1.map(s => s.service);
+      const labels = services.map(s => getServiceName(s));
+
+      const d1 = services.map(s => {
+        const found = list1.find(i => i.service === s);
+        return found ? found.percentage : 0;
+      });
+
+      const d2 = services.map(s => {
+        const found = list2.find(i => i.service === s);
+        return found ? found.percentage : 0;
+      });
+
+      destroyChart(lowerChartInstance);
+      const ctx = document.getElementById('lowerChart').getContext('2d');
+      lowerChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: `${c1} (%)`,
+              data: d1,
+              backgroundColor: 'rgba(0, 240, 255, 0.6)',
+              borderColor: '#00f0ff',
+              borderWidth: 1
+            },
+            {
+              label: `${c2} (%)`,
+              data: d2,
+              backgroundColor: 'rgba(255, 0, 85, 0.6)',
+              borderColor: '#ff0055',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#1f2937' }, ticks: { color: '#94a3b8', font: { size: 9 } } },
+            y: { grid: { color: '#1f2937' }, ticks: { color: '#94a3b8' } }
+          },
+          plugins: {
+            legend: { labels: { color: '#e2e8f0', font: { family: 'Orbitron' } } }
+          }
+        }
+      });
+    }
+
+    function destroyChart(chartInstance) {
+      if (chartInstance) chartInstance.destroy();
+    }
+
+    // Initialize application on page ready
+    window.addEventListener('DOMContentLoaded', loadDataset);
+  </script>
+</body>
+</html>
