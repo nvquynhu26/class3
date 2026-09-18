@@ -220,7 +220,7 @@
       box-shadow: 0 0 10px var(--neon-pink);
     }
 
-    /* Main Container: 중앙 정렬 & 유연한 반응형 */
+    /* Main Container */
     main {
       padding: 24px 20px;
       width: 100%;
@@ -258,7 +258,7 @@
       letter-spacing: 2px;
     }
 
-    /* 최적화된 반응형 2/3 및 1/3 레이아웃 (창 축소 시 자동 Wrap) */
+    /* Responsive Ratio 2/3 and 1/3 Grid */
     .grid-macro-ratio {
       display: grid;
       grid-template-columns: minmax(0, 2fr) minmax(360px, 1fr);
@@ -268,7 +268,6 @@
       margin: 0 auto;
     }
 
-    /* 1400px 미만 창 축소 시 자동으로 1컬럼 수직 정렬 */
     @media (max-width: 1400px) {
       .grid-macro-ratio {
         grid-template-columns: 1fr;
@@ -319,7 +318,7 @@
       min-height: 380px;
     }
 
-    /* 균등 분할 범례 Grid (반응형 4열 -> 2열) */
+    /* Legend Grid */
     .custom-hud-legend {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -381,7 +380,7 @@
       box-shadow: 0 0 6px currentColor;
     }
 
-    /* Year Selector */
+    /* Year Selector Controls */
     .year-inline-picker {
       display: flex;
       align-items: center;
@@ -837,10 +836,14 @@
     let mapCirclesLayer = null;
     let countryColorMap = {};
 
+    /* Lọc bỏ chính xác danh mục 'Không sử dụng' và 'Không áp dụng' */
     function isIgnoredCategory(serviceName) {
       if (!serviceName) return true;
-      const lower = serviceName.toLowerCase();
-      return lower.includes("haven't used") || lower.includes("not used") || lower.includes("not applicable");
+      const lower = serviceName.trim().toLowerCase();
+      return lower.includes("haven't used") || 
+             lower.includes("not applicable") || 
+             lower.includes("이용하지 않음") || 
+             lower.includes("해당 없음");
     }
 
     /* ==========================================================
@@ -1191,6 +1194,7 @@
       }
     }
 
+    // Tầng trên: 연도별 카테고리 시계열 추이
     function renderCountryMacroChart() {
       const c1 = document.getElementById('country-select-1').value;
       const c2 = document.getElementById('country-select-2').value;
@@ -1319,11 +1323,22 @@
       }
     }
 
+    // Tầng dưới: 세부 카테고리 점유율
     function renderCountryMicroChart() {
       const c1 = document.getElementById('country-select-1').value;
       const c2 = document.getElementById('country-select-2').value;
-      const year = document.getElementById('country-year-select').value;
+      let year = document.getElementById('country-year-select').value;
       const t = I18N[currentLang];
+
+      const cData1 = rawData[c1];
+      if (!cData1 || !cData1.by_year) return;
+
+      // Bảo đảm có năm hợp lệ nếu DOM select chưa kịp gán
+      if (!year || !cData1.by_year[year]) {
+        const available = Object.keys(cData1.by_year).sort();
+        year = available[available.length - 1];
+        document.getElementById('country-year-select').value = year;
+      }
 
       if (isCompareMode) {
         document.getElementById('title-country-micro').textContent = 
@@ -1384,14 +1399,8 @@
         document.getElementById('title-country-micro').textContent = 
           `${c1.toUpperCase()} (${year}) ${t.countryMicroTitleSuffix}`;
 
-        const cData = rawData[c1];
-        if (!cData || !cData.by_year || !cData.by_year[year]) {
-          if (chartInstances.countryMicro) chartInstances.countryMicro.destroy();
-          return;
-        }
-
-        const items = cData.by_year[year].filter(s => !isIgnoredCategory(s.service));
-        const labels = items.map(i => getServiceName(s.service));
+        const items = (cData1.by_year[year] || []).filter(s => !isIgnoredCategory(s.service));
+        const labels = items.map(i => getServiceName(i.service));
         const percentages = items.map(i => i.percentage);
 
         if (chartInstances.countryMicro) chartInstances.countryMicro.destroy();
