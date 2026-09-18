@@ -58,7 +58,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 36px;
+      padding: 18px 36px;
       border-bottom: 2px solid var(--border-color);
       background: rgba(11, 15, 23, 0.92);
       backdrop-filter: blur(14px);
@@ -69,7 +69,7 @@
 
     .brand-title {
       font-family: var(--font-display);
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       letter-spacing: 2px;
       color: var(--neon-cyan);
       display: flex;
@@ -96,9 +96,9 @@
     /* Tab Switcher */
     .tab-bar {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       background: rgba(6, 8, 12, 0.95);
-      padding: 6px;
+      padding: 5px;
       border: 1px solid #2a374d;
       border-radius: 4px;
       box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
@@ -109,9 +109,9 @@
       border: 1px solid #223249;
       color: #94a3b8;
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      padding: 12px 24px;
+      padding: 10px 22px;
       cursor: pointer;
       letter-spacing: 1.5px;
       display: flex;
@@ -166,7 +166,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
@@ -185,8 +185,8 @@
     .switch {
       position: relative;
       display: inline-block;
-      width: 54px;
-      height: 28px;
+      width: 52px;
+      height: 26px;
     }
 
     .switch input { opacity: 0; width: 0; height: 0; }
@@ -204,8 +204,8 @@
     .slider:before {
       position: absolute;
       content: "";
-      height: 20px;
-      width: 22px;
+      height: 18px;
+      width: 20px;
       left: 3px;
       bottom: 3px;
       background-color: var(--neon-cyan);
@@ -235,13 +235,13 @@
     .tab-content { display: none; width: 100%; }
     .tab-content.active { display: block; }
 
-    /* Section Separators */
+    /* Section Banner */
     .section-banner {
       display: flex;
       align-items: center;
       gap: 14px;
       padding: 12px 18px;
-      background: rgba(13, 17, 23, 0.8);
+      background: rgba(13, 17, 23, 0.85);
       border-left: 5px solid var(--neon-cyan);
       border-bottom: 1px solid var(--border-color);
       margin-bottom: 18px;
@@ -258,16 +258,19 @@
       letter-spacing: 2px;
     }
 
-    /* Grid Layouts */
-    .grid-two-col {
+    /* BỐ CỤC 2/3 VÀ 1/3 THEO ĐÚNG TỶ LỆ YÊU CẦU */
+    .grid-macro-ratio {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 2fr 1fr; /* 2/3 (66.6%) và 1/3 (33.3%) */
       gap: 22px;
       width: 100%;
+      align-items: start;
     }
 
-    @media (max-width: 1200px) {
-      .grid-two-col { grid-template-columns: 1fr; }
+    @media (max-width: 1280px) {
+      .grid-macro-ratio {
+        grid-template-columns: 1fr; /* Fallback thành 1 cột trên tablet/mobile */
+      }
     }
 
     .chart-box {
@@ -282,14 +285,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       border-bottom: 1px dashed #222f47;
       padding-bottom: 12px;
     }
 
     .chart-title {
       font-family: var(--font-display);
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       letter-spacing: 1.5px;
       color: var(--text-main);
       display: flex;
@@ -306,7 +309,60 @@
     .chart-canvas-container {
       position: relative;
       width: 100%;
-      height: 520px;
+      height: 480px;
+    }
+
+    /* BẢNG CHÚ THÍCH QUỐC GIA (CUSTOM UI LEGEND) CĂN CHỈNH ĐỀU TĂM TẮP */
+    .custom-hud-legend {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* Chia đều 4 cột cân xứng */
+      gap: 8px 12px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #1a2333;
+      background: rgba(8, 12, 18, 0.6);
+      padding: 14px 16px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .custom-hud-legend {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .legend-item-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: #cbd5e1;
+      cursor: pointer;
+      padding: 6px 8px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .legend-item-chip:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #334155;
+    }
+
+    .legend-item-chip.is-hidden {
+      opacity: 0.35;
+      text-decoration: line-through;
+      filter: grayscale(1);
+    }
+
+    .legend-color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px currentColor;
     }
 
     /* Year Selector Controls */
@@ -339,7 +395,7 @@
       cursor: pointer;
     }
 
-    /* Lower Section: Controls Panel */
+    /* Country Control Bar */
     .controls-grid {
       display: flex;
       flex-wrap: wrap;
@@ -517,27 +573,31 @@
     <!-- TAB 1: ANALYTICS HUD -->
     <div class="tab-content active" id="view-analytics">
       
-      <!-- PHẦN 1 (TRÊN CÙNG): TOÀN BỘ DATA TỔNG CÁC QUỐC GIA -->
+      <!-- PHẦN 1 (TRÊN CÙNG): GLOBAL OVERVIEW THEO TỶ LỆ 2/3 VÀ 1/3 -->
       <div class="section-banner">
         <div class="section-title" id="sec-title-global">01 // 전체 국가 매크로 분석 (GLOBAL OVERVIEW)</div>
       </div>
 
-      <div class="grid-two-col" style="margin-bottom: 36px;">
-        <!-- Bên Trái: 전체 국가별 교육 비참여율(%) 추이 -->
+      <div class="grid-macro-ratio" style="margin-bottom: 36px;">
+        <!-- Bên Trái (2/3): 전체 국가별 교육 비참여율(%) 추이 -->
         <div class="chart-box">
           <div class="chart-box-header">
             <div class="chart-title" id="title-total-nonusage">전체 국가별 교육 비참여율(%) 추이</div>
-            <span style="font-size: 0.85rem; color: var(--neon-cyan); font-weight: 700;">[ MULTI-LINE TIMELINE ]</span>
+            <span style="font-size: 0.85rem; color: var(--neon-cyan); font-weight: 700;">[ MULTI-LINE // 66% WIDTH ]</span>
           </div>
+          
           <div class="chart-canvas-container">
             <canvas id="chartTotalNonUsage"></canvas>
           </div>
+
+          <!-- Bảng chú thích căn đều 4 cột tùy biến (Custom UX Legend) -->
+          <div class="custom-hud-legend" id="customLegendContainer"></div>
         </div>
 
-        <!-- Bên Phải: GLOBAL TOTAL (Phân bổ bình quân các category giáo dục thực tế) -->
+        <!-- Bên Phải (1/3): GLOBAL TOTAL -->
         <div class="chart-box">
           <div class="chart-box-header">
-            <div class="chart-title" id="title-global-total">GLOBAL TOTAL // 카테고리별 글로벌 평균 비율</div>
+            <div class="chart-title" id="title-global-total">GLOBAL TOTAL // 평균 비율</div>
             <div class="year-inline-picker">
               <span class="year-inline-label" id="lbl-global-year">연도:</span>
               <select class="year-inline-select" id="global-year-select">
@@ -548,7 +608,7 @@
               </select>
             </div>
           </div>
-          <div class="chart-canvas-container">
+          <div class="chart-canvas-container" style="height: 575px;">
             <canvas id="chartGlobalTotal"></canvas>
           </div>
         </div>
@@ -605,7 +665,7 @@
         </div>
       </div>
 
-      <!-- TẦNG DƯỚI CỦA QUỐC GIA: Chi tiết phân bổ theo từng năm của quốc gia đó -->
+      <!-- TẦNG DƯỚI CỦA QUỐC GIA: Chi tiết phân bổ theo từng năm -->
       <div class="chart-box">
         <div class="chart-box-header">
           <div class="chart-title" id="title-country-micro">SOUTH KOREA // 세부 카테고리 점유율</div>
@@ -650,7 +710,7 @@
         secGlobal: "01 // 전체 국가 매크로 분석 (GLOBAL OVERVIEW)",
         secCountry: "02 // 국가별 상세 데이터 조회 (COUNTRY EXPLORER)",
         totalNonUsageTitle: "전체 국가별 교육 비참여율(%) 추이",
-        globalTotalTitle: "GLOBAL TOTAL // 카테고리별 글로벌 평균 비율",
+        globalTotalTitle: "GLOBAL TOTAL // 평균 비율",
         primaryTarget: "조회 국가 선택 (Select Target Country)",
         compareTarget: "비교 대상 국가 (Comparison Country)",
         btnCompareOn: "[-] 단일 국가 모드",
@@ -681,7 +741,7 @@
         secGlobal: "01 // GLOBAL MACRO OVERVIEW",
         secCountry: "02 // DETAILED COUNTRY EXPLORER",
         totalNonUsageTitle: "Non-usage Rate Across All Countries (%)",
-        globalTotalTitle: "GLOBAL TOTAL // Mean Category Usage Rate",
+        globalTotalTitle: "GLOBAL TOTAL // Mean Usage Rate",
         primaryTarget: "Select Target Country",
         compareTarget: "Comparison Country",
         btnCompareOn: "[-] Single View Mode",
@@ -745,7 +805,7 @@
       '#00f0ff', '#ff0055', '#ffaa00', '#00ff66', 
       '#9d4edd', '#0070f3', '#ff007f', '#50e3c2',
       '#38bdf8', '#f43f5e', '#eab308', '#22c55e',
-      '#a855f7', '#06b6d4', '#ec4899', '#10b981'
+      '#a855f7', '#06b6d4', '#ec4899', '#10b981', '#fb923c'
     ];
 
     let currentLang = "ko";
@@ -761,7 +821,6 @@
     let mapCirclesLayer = null;
     let countryColorMap = {};
 
-    /* Hàm kiểm tra lọc bỏ mục '교육 서비스를 이용하지 않음' */
     function isIgnoredCategory(serviceName) {
       if (!serviceName) return true;
       const lower = serviceName.toLowerCase();
@@ -823,10 +882,7 @@
       setupEventListeners();
       updateLanguageUI();
 
-      // Render cố định 2 biểu đồ tổng ở trên cùng
       renderTopGlobalOverview();
-
-      // Render phần quốc gia bên dưới
       renderCountryExplorer();
     }
 
@@ -889,12 +945,10 @@
         if (leafletMapInstance) renderMapBubbles();
       });
 
-      // Năm của khối Global Total
       document.getElementById('global-year-select').addEventListener('change', () => {
         renderGlobalTotalChart();
       });
 
-      // Chọn quốc gia
       document.getElementById('country-select-1').addEventListener('change', () => {
         updateCountryYearDropdown();
         renderCountryExplorer();
@@ -902,13 +956,11 @@
 
       document.getElementById('country-select-2').addEventListener('change', renderCountryExplorer);
 
-      // Năm của riêng quốc gia đang chọn
       document.getElementById('country-year-select').addEventListener('change', () => {
         renderCountryMicroChart();
         updateHUD();
       });
 
-      // Bật/tắt so sánh
       const btnCompare = document.getElementById('btn-compare-mode');
       btnCompare.addEventListener('click', () => {
         isCompareMode = !isCompareMode;
@@ -947,14 +999,14 @@
     }
 
     /* ==========================================================
-       PHẦN 1: GLOBAL OVERVIEW (CỐ ĐỊNH Ở TRÊN CÙNG)
+       PHẦN 1: GLOBAL OVERVIEW (2/3 VÀ 1/3)
     ========================================================== */
     function renderTopGlobalOverview() {
       renderTotalNonUsageChart();
       renderGlobalTotalChart();
     }
 
-    // 1. 전체 국가별 교육 비참여율(%) 추이 (Biểu đồ đường)
+    // 1. 전체 국가별 교육 비참여율(%) 추이 (2/3 Chiều Rộng)
     function renderTotalNonUsageChart() {
       const countries = Object.keys(rawData).sort();
       const allYears = ["2023", "2024", "2025", "2026"];
@@ -978,7 +1030,7 @@
           borderWidth: 2,
           tension: 0.3,
           spanGaps: true,
-          pointRadius: 4.5
+          pointRadius: 4
         };
       });
 
@@ -999,16 +1051,43 @@
             }
           },
           plugins: {
-            legend: { 
-              position: 'right', 
-              labels: { color: '#f1f5f9', font: { size: 11, family: 'JetBrains Mono' }, boxWidth: 14 } 
-            }
+            legend: { display: false } // Tắt legend mặc định để dùng Custom HUD Legend 4 cột
           }
         }
       });
+
+      // Tạo Custom HUD Legend chia đều 4 cột
+      renderCustomLegend(chartInstances.totalNonUsage, countries);
     }
 
-    // 2. GLOBAL TOTAL (Đã loại bỏ hoàn toàn mục 비이용률/교육 서비스를 이용하지 않음)
+    function renderCustomLegend(chart, countries) {
+      const container = document.getElementById('customLegendContainer');
+      container.innerHTML = '';
+
+      countries.forEach((country, index) => {
+        const color = countryColorMap[country];
+        const chip = document.createElement('div');
+        chip.className = 'legend-item-chip';
+        chip.dataset.datasetIndex = index;
+
+        chip.innerHTML = `
+          <span class="legend-color-dot" style="background-color: ${color}; color: ${color};"></span>
+          <span>${country}</span>
+        `;
+
+        // Bật/tắt đường biểu diễn khi click vào tên quốc gia
+        chip.addEventListener('click', () => {
+          const isVisible = chart.isDatasetVisible(index);
+          chart.setDatasetVisibility(index, !isVisible);
+          chart.update();
+          chip.classList.toggle('is-hidden', isVisible);
+        });
+
+        container.appendChild(chip);
+      });
+    }
+
+    // 2. GLOBAL TOTAL (1/3 Chiều Rộng)
     function renderGlobalTotalChart() {
       const year = document.getElementById('global-year-select').value;
       const countries = Object.keys(rawData);
@@ -1017,7 +1096,6 @@
       countries.forEach(c => {
         if (rawData[c].by_year && rawData[c].by_year[year]) {
           rawData[c].by_year[year].forEach(item => {
-            // Lọc bỏ danh mục 비참여/không sử dụng dịch vụ
             if (isIgnoredCategory(item.service)) return;
             if (!categoryMap[item.service]) categoryMap[item.service] = [];
             categoryMap[item.service].push(item.percentage);
@@ -1040,7 +1118,7 @@
           datasets: [{
             label: 'Global Mean %',
             data: averages,
-            backgroundColor: 'rgba(0, 240, 255, 0.7)',
+            backgroundColor: 'rgba(0, 240, 255, 0.75)',
             borderColor: 'var(--neon-cyan)',
             borderWidth: 1.5
           }]
@@ -1052,10 +1130,21 @@
           scales: {
             x: { 
               grid: { color: '#1e293b' }, 
-              ticks: { color: '#cbd5e1', font: { size: 13 } },
-              title: { display: true, text: 'Mean Participation Rate %', color: '#64748b', font: { size: 13 } }
+              ticks: { color: '#cbd5e1', font: { size: 12 } },
+              title: { display: true, text: 'Mean %', color: '#64748b', font: { size: 12 } }
             },
-            y: { grid: { color: '#1e293b' }, ticks: { color: '#f1f5f9', font: { size: 12.5, weight: '600' } } }
+            y: { 
+              grid: { color: '#1e293b' }, 
+              ticks: { 
+                color: '#f1f5f9', 
+                font: { size: 11.5, weight: '600' },
+                callback: function(value) {
+                  // Rút gọn chữ nếu quá dài trên màn hình 1/3
+                  const label = this.getLabelForValue(value);
+                  return label.length > 14 ? label.substr(0, 14) + '…' : label;
+                }
+              } 
+            }
           },
           plugins: {
             legend: { display: false }
@@ -1065,8 +1154,8 @@
     }
 
     /* ==========================================================
-       PHẦN 2: COUNTRY EXPLORER (CHI TIẾT TỪNG QUỐC GIA PHÍA DƯỚI)
-    ========================================================== */
+       PHẦN 2: COUNTRY EXPLORER
+    ========================================================= */
     function renderCountryExplorer() {
       updateHUD();
       renderCountryMacroChart();
@@ -1089,7 +1178,7 @@
       }
     }
 
-    // 1. Tầng trên của quốc gia: 연도별 카테고리 시계열 추이 (Đã loại bỏ mục 교육 서비스를 이용하지 않음)
+    // Tầng trên: 연도별 카테고리 시계열 추이
     function renderCountryMacroChart() {
       const c1 = document.getElementById('country-select-1').value;
       const c2 = document.getElementById('country-select-2').value;
@@ -1149,7 +1238,6 @@
           }
         });
       } else {
-        // Radar Chart chuẩn cho từng quốc gia
         document.getElementById('title-country-macro').textContent = 
           `${c1} // ${t.countryMacroTitle}`;
 
@@ -1157,7 +1245,6 @@
         if (!cData || !cData.by_year) return;
 
         const years = Object.keys(cData.by_year).sort();
-        // Lọc bỏ danh mục 교육 서비스를 이용하지 않음
         const services = cData.by_year[years[0]]
           .filter(s => !isIgnoredCategory(s.service))
           .map(s => s.service);
@@ -1220,7 +1307,7 @@
       }
     }
 
-    // 2. Tầng dưới của quốc gia: Chi tiết phân bổ các danh mục theo từng năm (Đã loại bỏ mục 교육 서비스를 이용하지 않음)
+    // Tầng dưới: Chi tiết danh mục
     function renderCountryMicroChart() {
       const c1 = document.getElementById('country-select-1').value;
       const c2 = document.getElementById('country-select-2').value;
@@ -1292,7 +1379,6 @@
           return;
         }
 
-        // Lọc bỏ mục 교육 서비스를 이용하지 않음
         const items = cData.by_year[year].filter(s => !isIgnoredCategory(s.service));
         const labels = items.map(i => getServiceName(i.service));
         const percentages = items.map(i => i.percentage);
@@ -1406,7 +1492,6 @@
           switchMainTab('analytics');
           updateCountryYearDropdown();
           renderCountryExplorer();
-          // Cuộn mượt xuống phần Country Explorer
           document.querySelector('.controls-grid').scrollIntoView({ behavior: 'smooth' });
         });
 
